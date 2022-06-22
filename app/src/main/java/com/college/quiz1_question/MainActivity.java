@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         mColor = color;
     }
 
-    //TODO 1
+     //TODO 1
+
     /**
      * Handles the onClick for the Count button.  Increments the value of the mCount global and
      * updates the textview.
@@ -64,9 +66,12 @@ public class MainActivity extends AppCompatActivity {
      * @param view The view (Button) that was clicked.
      */
     public void countUp(View view) {
+        mCount = mCount + 1;
+        mShowCountTextView.setText("" + mCount);
     }
 
     //TODO 2
+
     /**
      * Handles the onClick for the Reset button.
      * Resets the global count and background
@@ -76,9 +81,19 @@ public class MainActivity extends AppCompatActivity {
      * @param view The view (Button) that was clicked.
      */
     public void reset(View view) {
+        int mmColor = ContextCompat.getColor(MainActivity.this, R.color.default_background);
+        mCount = 0;
+        mShowCountTextView.setText("0");
+        mShowCountTextView.setBackgroundColor(mmColor);
+
+        //clear the sharedPreferences
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 
     //TODO 3
+
     /**
      * Handles the onClick for the 'Save Prefs' button.
      * Saves the Color and Counter to shared preferences
@@ -86,9 +101,14 @@ public class MainActivity extends AppCompatActivity {
      * @param view The view (Button) that was clicked.
      */
     public void savePrefs(View view) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(COUNT_KEY, mShowCountTextView.getText().toString());
+        editor.putInt(COLOR_KEY, mColor);
+        editor.apply();
     }
 
     //TODO 4
+
     /**
      * Handles the onClick for the 'Restaure Prefs' button.
      * Reads the Color and Counter from the Preferences
@@ -97,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
      * @param view The view (Button) that was clicked.
      */
     public void restaurePrefs(View view) {
+        String count = mPreferences.getString(COUNT_KEY, "");
+        int color = mPreferences.getInt(COLOR_KEY, 0);
+        mShowCountTextView.setText("" + count);
+        mShowCountTextView.setBackgroundColor(color);
     }
-
 }
